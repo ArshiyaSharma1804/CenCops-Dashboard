@@ -22,5 +22,5 @@ export const departments = [
   { id: 3, name: "Threat Intelligence", officers: 1, tasks: 1, image: "image_4_ti.png", status: "SWITCH" },
 ];
 
-export const currentDepartment = "Digital Forensics Lab";
+export const currentDepartment = "IPDR / CDR";
 export const currentUser = "DSP Pandey";

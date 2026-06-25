@@ -1,13 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { currentUser } from '../data';
+import { useAppContext } from '../context/AppContext';
 
 const Sidebar = () => {
+  const { isExpanded, toggleExpanded } = useAppContext();
+
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isExpanded ? 'collapsed' : ''}`}>
       <div className="sidebar-bg-image"></div>
       
-      <div className="sidebar-logo">Cen-COPS</div>
+      <div className="sidebar-logo" onClick={toggleExpanded} style={{ cursor: 'pointer' }}>cencops</div>
       
       <div className="sidebar-separator"></div>
       

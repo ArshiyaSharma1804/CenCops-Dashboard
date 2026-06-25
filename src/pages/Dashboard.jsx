@@ -1,7 +1,10 @@
 import React from 'react';
 import { currentDepartment, tasks, officers } from '../data';
+import './dashboard.css';
+import { useAppContext } from '../context/AppContext';
 
 const Dashboard = () => {
+  const { isExpanded } = useAppContext();
   const inProgressTasks = tasks.filter(t => t.status === 'IN PROGRESS').length;
   const pendingTasks = tasks.filter(t => t.status === 'PENDING').length;
   const doneTasks = tasks.filter(t => t.status === 'DONE').length;
@@ -9,7 +12,7 @@ const Dashboard = () => {
   return (
     <div>
       <div className="page-header">
-        <div className="page-subtitle">DFL • IAF MUSEUM, 18C</div>
+        <div className="page-subtitle">IPDR • IAF MUSEUM, 18C</div>
         <div className="page-title">{currentDepartment}</div>
       </div>
       
@@ -48,6 +51,7 @@ const Dashboard = () => {
                 <th style={{width: '30px'}}></th>
                 <th>TASK</th>
                 <th>ASSIGNED TO</th>
+                {isExpanded && <th>ORDER ID</th>}
                 <th>DUE</th>
                 <th>STATUS</th>
               </tr>
@@ -58,6 +62,7 @@ const Dashboard = () => {
                   <td style={{color: '#5E594B'}}>{index + 1}</td>
                   <td style={{color: '#000'}}>{task.task}</td>
                   <td style={{color: '#000'}}>{task.assignedTo}</td>
+                  {isExpanded && <td style={{color: '#000', fontFamily: 'var(--font-code)'}}>{task.orderId}</td>}
                   <td style={{color: '#000'}}>{task.due}</td>
                   <td>
                     <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>

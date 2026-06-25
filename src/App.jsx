@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Officers from './pages/Officers';
 import Departments from './pages/Departments';
+import { AppProvider } from './context/AppContext';
 import './index.css';
 
 const Layout = ({ children }) => {
@@ -25,8 +26,9 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <div className="app-wrapper">
-      <Router>
+    <AppProvider>
+      <div className="app-wrapper">
+        <Router>
         {!isAuthenticated ? (
           <Login onLogin={() => setIsAuthenticated(true)} />
         ) : (
@@ -39,8 +41,9 @@ function App() {
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         )}
-      </Router>
-    </div>
+        </Router>
+      </div>
+    </AppProvider>
   );
 }
 

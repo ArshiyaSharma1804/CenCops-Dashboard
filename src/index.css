@@ -64,6 +64,15 @@ body {
   padding: 68px 0 30px 42px;
   z-index: 10;
   flex-shrink: 0;
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
 }
 
 .sidebar-bg-image {
@@ -199,6 +208,7 @@ body {
   flex-direction: column;
   position: relative;
   z-index: 1;
+  transition: all 0.5s ease;
 }
 
 .topbar {
@@ -308,11 +318,6 @@ body {
   position: relative;
 }
 
-.widget-in-progress {
-  background: var(--status-pink-bg);
-  border: 2px solid var(--status-pink-border);
-}
-
 .widget-pending {
   background: var(--status-yellow-bg);
   border: 2px solid var(--status-yellow-border);
@@ -321,10 +326,6 @@ body {
 .widget-done {
   background: var(--status-green-bg);
   border: 2px solid var(--status-green-border);
-  align-content: center;
-  align-items: center;
-  text-align: center;
-  align-self: center;
 }
 
 .widget-title {
@@ -333,9 +334,9 @@ body {
   letter-spacing: 0.04em;
 }
 
-.widget-done .widget-title, .widget-done .widget-count {
+/* .widget-done .widget-title, .widget-done .widget-count {
   color: var(--text-light);
-}
+} */
 
 .widget-subtitle {
   font-size: 13px;
@@ -415,6 +416,13 @@ body {
 
 .current-tasks .table th,
 .current-tasks .table td {
+  text-align: left;
+}
+
+.current-tasks .table th:first-child,
+.current-tasks .table td:first-child,
+.current-tasks .table th:last-child,
+.current-tasks .table td:last-child {
   text-align: center;
 }
 

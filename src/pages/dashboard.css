@@ -1,0 +1,52 @@
+.widget.widget-in-progress {
+  /* Notice the period before widget-in-progress (no space) so it targets both classes on the same element */
+  background-color: #f5b8da;
+  border-radius: 15px;
+  width: 318px;
+  height: 80px;
+  border: 2px solid var(--status-pink-border)
+}
+
+.widget-title {
+  font-size: 18px;
+  font-weight: regular;
+  padding-top: 0px;
+  margin-bottom: 3px; /* Adjust this to change the gap! */
+  padding-left: 8px;
+}
+
+/* We override the absolute positioning from index.css so the gap respects the margin-bottom above */
+.widget-subtitle {
+  position: static; 
+  padding-left: 8px;
+}
+
+.widget-count{
+  font-size: 35px;
+  font-weight: regular;
+  padding-right: 18px;
+}
+
+.widget widget-done {
+  /* Notice the period before widget-in-progress (no space) so it targets both classes on the same element */
+  background-color: #9aab64;
+  border-radius: 15px;
+  width: 318px;
+  height: 80px;
+}
+
+.widget-title-done {
+  font-size: 18px;
+  font-weight: regular;
+  color: white;
+  padding-top: 0px;
+  margin-bottom: 3px; /* Adjust this to change the gap! */
+  padding-left: 8px;
+}
+
+.widget-count-done {
+  font-size: 35px;
+  position: static; 
+  padding-left: 8px;
+  color: white;
+}
