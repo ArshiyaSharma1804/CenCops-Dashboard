@@ -50,3 +50,19 @@
   padding-left: 8px;
   color: white;
 }
+
+.current-tasks-1{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 646px;
+  height: 481px;
+}
+
+.card-title-1 {
+  font-size: 31px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  align-items: left;
+}

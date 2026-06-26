@@ -298,24 +298,25 @@ body {
   font-weight: 600;
   color: var(--text-dark);
   letter-spacing: -0.04em;
+  padding-top: 10px;
 }
 
 .status-widgets {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 20px;
-  align-items: center;
 }
 
 .widget {
   height: 80px;
-  flex: 1;
   border-radius: 15px;
   padding: 15px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  width: 100% !important; /* Override hardcoded widths */
 }
 
 .widget-pending {
@@ -359,9 +360,20 @@ body {
 }
 
 .dashboard-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  height: 479px;
+}
+
+.current-tasks-1 {
+  grid-column: span 2;
+  width: 100% !important; /* Override hardcoded width */
+  height: 95% !important; /* Override hardcoded height so they match */
+}
+
+.officers-list {
+  grid-column: span 1;
+  height: 95% !important; /* Ensure both stretch equally */
 }
 
 .card-container {
@@ -371,6 +383,7 @@ body {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  height: 580px;
 }
 
 .card-title {
@@ -414,17 +427,7 @@ body {
   border-bottom: none;
 }
 
-.current-tasks .table th,
-.current-tasks .table td {
-  text-align: left;
-}
 
-.current-tasks .table th:first-child,
-.current-tasks .table td:first-child,
-.current-tasks .table th:last-child,
-.current-tasks .table td:last-child {
-  text-align: center;
-}
 
 .status-badge {
   font-family: var(--font-code);
@@ -458,19 +461,20 @@ body {
   display: flex;
   gap: 10px;
   position: absolute;
-  right: 30px;
-  top: 140px;
+  right: 0;
+  top: 15px; /* Moved up from 140px */
 }
 
 .action-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   border: none;
+  font-size: 20px; /* Scale up the icons inside */
 }
 
 .action-btn.black { background: #000; color: #fff; }

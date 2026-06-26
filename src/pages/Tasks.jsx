@@ -18,7 +18,7 @@ const Tasks = () => {
         </div>
       </div>
       
-      <div className="card-container" style={{ height: '620px', marginTop: '20px' }}>
+      <div className="card-container" style={{ height: '590px', marginTop: '20px' }}>
         <table className="table" style={{ width: '100%', marginTop: '10px' }}>
           <thead>
             <tr>
@@ -28,13 +28,13 @@ const Tasks = () => {
               <th>ORDER ID</th>
               <th>DATE</th>
               <th>DUE</th>
-              <th>STATUS</th>
+              <th style={{ textAlign: 'center' }}>STATUS</th>
             </tr>
           </thead>
           <tbody>
             {taskList.map((task, index) => (
               <tr key={task.id}>
-                <td style={{color: '#5E594B'}}>{index + 1}</td>
+                <td style={{color: '#5E594B', textAlign: 'center'}}>{index + 1}</td>
                 <td style={{color: '#000'}}>{task.task}</td>
                 <td>
                   <select 
@@ -49,7 +49,7 @@ const Tasks = () => {
                 <td style={{color: '#000'}}>{task.orderId}</td>
                 <td style={{color: '#000'}}>{task.date}</td>
                 <td style={{color: '#000'}}>{task.due}</td>
-                <td>
+                <td style={{ textAlign: 'center' }}>
                   <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>
                     {task.status}
                   </span>

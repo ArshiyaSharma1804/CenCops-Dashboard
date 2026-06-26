@@ -35,16 +35,16 @@ const Dashboard = () => {
         
         <div className="widget widget-done">
           <div>
-            <div className="widget-title">DONE</div>
+            <div className="widget-title-done">DONE</div>
             <div className="widget-subtitle">Completed tasks</div>
           </div>
-          <div className="widget-count">{doneTasks}</div>
+          <div className="widget-count-done">{doneTasks}</div>
         </div>
       </div>
       
       <div className="dashboard-grid">
-        <div className="card-container current-tasks">
-          <div className="card-title">Current Tasks</div>
+        <div className="card-container current-tasks-1">
+          <div className="card-title-1" style={{ alignSelf: 'flex-start' }}>Current Tasks</div>
           <table className="table">
             <thead>
               <tr>
@@ -53,18 +53,18 @@ const Dashboard = () => {
                 <th>ASSIGNED TO</th>
                 {isExpanded && <th>ORDER ID</th>}
                 <th>DUE</th>
-                <th>STATUS</th>
+                <th style={{ textAlign: 'center' }}>STATUS</th>
               </tr>
             </thead>
             <tbody>
               {tasks.slice(0, 7).map((task, index) => (
                 <tr key={task.id}>
-                  <td style={{color: '#5E594B'}}>{index + 1}</td>
+                  <td style={{color: '#5E594B', textAlign: 'center'}}>{index + 1}</td>
                   <td style={{color: '#000'}}>{task.task}</td>
                   <td style={{color: '#000'}}>{task.assignedTo}</td>
                   {isExpanded && <td style={{color: '#000', fontFamily: 'var(--font-code)'}}>{task.orderId}</td>}
                   <td style={{color: '#000'}}>{task.due}</td>
-                  <td>
+                  <td style={{ textAlign: 'center' }}>
                     <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>
                       {task.status}
                     </span>

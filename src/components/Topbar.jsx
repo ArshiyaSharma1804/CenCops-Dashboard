@@ -34,25 +34,21 @@ const Topbar = () => {
     headerActions = (
       <button className="dropdown-btn">
         <span>+</span>
-        New Task
+        Register Case
       </button>
     );
   }
 
   return (
     <div className="topbar">
+      <div 
+        className={`sidebar-logo black-logo ${isExpanded ? 'expanded' : 'collapsed'}`} 
+        onClick={toggleExpanded} 
+      >
+        cencops
+      </div>
       
-      {isExpanded && (
-        <div 
-          className="sidebar-logo" 
-          onClick={toggleExpanded} 
-          style={{ cursor: 'pointer', color: '#000', marginRight: 'auto', marginBottom: 0 }}
-        >
-          cencops
-        </div>
-      )}
-      
-      <button className="dropdown-btn" style={{ marginLeft: isExpanded ? '0' : 'auto' }}>
+      <button className={`dropdown-btn ${isExpanded ? 'expanded' : 'collapsed'}`}>
         {drpicon}{currentDepartment}
         <span style={{fontSize: 10, marginLeft: 10}}>▼</span>
       </button>
