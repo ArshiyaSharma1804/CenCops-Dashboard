@@ -52,3 +52,191 @@
   padding-left: 8px;
   color: white;
 }
+
+/* Officers Sidebar Styles */
+.action-btn {
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn:hover, .action-btn.active {
+  background: #000 !important;
+  color: #fff;
+}
+
+.action-btn::after {
+  content: attr(data-hover);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-code);
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.action-btn:hover::after, .action-btn.active::after {
+  opacity: 1;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Profile Tab */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 10px;
+}
+
+.info-label {
+  font-family: var(--font-code);
+  font-size: 10px;
+  color: rgba(97, 97, 97, 0.5);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-family: var(--font-main);
+  font-size: 14px;
+  color: #000;
+}
+
+.info-value-code {
+  font-family: var(--font-code);
+  font-size: 14px;
+  color: #000;
+}
+
+/* Cases Tab */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 5px 0;
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(94, 89, 75, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+}
+
+.task-item.done .task-checkbox {
+  background: #000;
+  border-color: #000;
+}
+
+.task-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-code);
+  font-size: 10px;
+  min-width: 60px;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.task-title {
+  font-family: var(--font-main);
+  font-size: 11px;
+  color: #000;
+}
+
+.task-item.done .task-title {
+  color: rgba(94, 89, 75, 0.5);
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+/* Reports Tab */
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.report-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(200, 191, 169, 0.2);
+  border: 1px solid rgba(94, 89, 75, 0.25);
+  border-radius: 8px;
+  padding: 12px 15px;
+}
+
+.report-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.report-id {
+  font-family: var(--font-code);
+  font-size: 10px;
+  color: rgba(94, 89, 75, 0.5);
+}
+
+.report-title {
+  font-family: var(--font-main);
+  font-size: 11px;
+  color: #000;
+}
+
+.report-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.eye-icon-container {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #33363F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.report-view span {
+  font-family: var(--font-code);
+  font-size: 8px;
+  color: #000;
+}

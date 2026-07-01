@@ -6,13 +6,13 @@ import card4 from "./assets/image HARD_DRIVE.png";
 import card5 from "./assets/image MEDIA.png";
 
 export const officers = [
-  { id: 1, name: "Insp. Singh Sandhu", email: "sandhu@zoho.gov.in", badge: "PUN-078", department: "IPDR / CDR", tasks: 4 },
-  { id: 2, name: "SI R. Kapoor", email: "ranvir.kapoor@gmail.com", badge: "CHD-071", department: "OSINT", tasks: 3 },
-  { id: 3, name: "SI T. Banerjee", email: "president.banerjee@gmail.com", badge: "KAN-324", department: "Mobile", tasks: 3 },
-  { id: 4, name: "Const. Ali Raza", email: "aliraza1@drdo.gov.in", badge: "UKR-742", department: "Hard Drive", tasks: 2 },
-  { id: 5, name: "Const. K. Singh", email: "kulwinder29@gmail.com", badge: "CHD-009", department: "Media", tasks: 3 },
-  { id: 6, name: "Insp. P. Sharma", email: "p.sharma@gov.in", badge: "DEL-101", department: "OSINT", tasks: 2 },
-  { id: 7, name: "Const. J. Doe", email: "j.doe@gov.in", badge: "MUM-202", department: "Mobile", tasks: 1 },
+  { id: 1, name: "Insp. Singh Sandhu", email: "sandhu@zoho.gov.in", badge: "PUN-078", department: "IPDR / CDR", tasks: 4, rank: "Inspector", dob: "06-12-1977", age: "48 Years", district: "SAS Nagar", state: "Punjab", status: "Active", specialization: "Social Media" },
+  { id: 2, name: "SI R. Kapoor", email: "ranvir.kapoor@gmail.com", badge: "CHD-071", department: "OSINT", tasks: 3, rank: "Sub-Inspector", dob: "15-08-1985", age: "40 Years", district: "Chandigarh", state: "Chandigarh", status: "Active", specialization: "Cyber Forensics" },
+  { id: 3, name: "SI T. Banerjee", email: "president.banerjee@gmail.com", badge: "KAN-324", department: "Mobile", tasks: 3, rank: "Sub-Inspector", dob: "22-11-1990", age: "35 Years", district: "Kanpur", state: "Uttar Pradesh", status: "Active", specialization: "Mobile Forensics" },
+  { id: 4, name: "Const. Ali Raza", email: "aliraza1@drdo.gov.in", badge: "UKR-742", department: "Hard Drive", tasks: 2, rank: "Constable", dob: "10-05-1995", age: "30 Years", district: "Dehradun", state: "Uttarakhand", status: "Active", specialization: "Data Recovery" },
+  { id: 5, name: "Const. K. Singh", email: "kulwinder29@gmail.com", badge: "CHD-009", department: "Media", tasks: 3, rank: "Constable", dob: "01-02-1992", age: "34 Years", district: "Chandigarh", state: "Chandigarh", status: "Active", specialization: "Audio/Video Analysis" },
+  { id: 6, name: "Insp. P. Sharma", email: "p.sharma@gov.in", badge: "DEL-101", department: "OSINT", tasks: 2, rank: "Inspector", dob: "14-09-1980", age: "45 Years", district: "New Delhi", state: "Delhi", status: "Active", specialization: "Open Source Intelligence" },
+  { id: 7, name: "Const. J. Doe", email: "j.doe@gov.in", badge: "MUM-202", department: "Mobile", tasks: 1, rank: "Constable", dob: "30-07-1998", age: "27 Years", district: "Mumbai", state: "Maharashtra", status: "Active", specialization: "Device Unlocking" },
 ];
 
 export const tasks = [
