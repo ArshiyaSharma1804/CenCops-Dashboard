@@ -1,19 +1,32 @@
-import React from 'react';
-import { currentDepartment, tasks, officers } from '../data';
+import React, { useMemo } from 'react';
 import './dashboard.css';
 import { useAppContext } from '../context/AppContext';
+import Highlight from '../components/Highlight';
 
 const Dashboard = () => {
-  const { isExpanded } = useAppContext();
-  const inProgressTasks = tasks.filter(t => t.status === 'IN PROGRESS').length;
-  const pendingTasks = tasks.filter(t => t.status === 'PENDING').length;
-  const doneTasks = tasks.filter(t => t.status === 'DONE').length;
+  const { isExpanded, selectedDepartment, globalSearchTerm, tasks, officers } = useAppContext();
+  
+  const filteredTasks = useMemo(() => 
+    selectedDepartment === 'All' 
+      ? tasks 
+      : tasks.filter(t => t.department === selectedDepartment)
+  , [selectedDepartment, tasks]);
+  
+  const filteredOfficers = useMemo(() => 
+    selectedDepartment === 'All' 
+      ? officers 
+      : officers.filter(o => o.department === selectedDepartment)
+  , [selectedDepartment, officers]);
+  
+  const inProgressTasks = filteredTasks.filter(t => t.status === 'IN PROGRESS').length;
+  const pendingTasks = filteredTasks.filter(t => t.status === 'PENDING').length;
+  const doneTasks = filteredTasks.filter(t => t.status === 'DONE').length;
 
   return (
     <div>
-      <div className="page-header">
-        <div className="page-subtitle">IPDR • IAF MUSEUM, 18C</div>
-        <div className="page-title">{currentDepartment}</div>
+      <div className="page-header" style={{ position: 'relative' }}>
+        <div className="page-subtitle">CATEGORY • IAF MUSEUM, 18C</div>
+        <div className="page-title">{selectedDepartment}</div>
       </div>
       
       <div className="status-widgets">
@@ -43,56 +56,68 @@ const Dashboard = () => {
       </div>
       
       <div className="dashboard-grid">
-        <div className="card-container current-tasks-1">
-          <div className="card-title-1" style={{ alignSelf: 'flex-start' }}>Current Tasks</div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={{width: '30px'}}></th>
-                <th>TASK</th>
-                <th>ASSIGNED TO</th>
-                {isExpanded && <th>ORDER ID</th>}
-                <th>DUE</th>
-                <th style={{ textAlign: 'center' }}>STATUS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.slice(0, 7).map((task, index) => (
-                <tr key={task.id}>
-                  <td style={{color: '#5E594B', textAlign: 'center'}}>{index + 1}</td>
-                  <td style={{color: '#000'}}>{task.task}</td>
-                  <td style={{color: '#000'}}>{task.assignedTo}</td>
-                  {isExpanded && <td style={{color: '#000', fontFamily: 'var(--font-code)'}}>{task.orderId}</td>}
-                  <td style={{color: '#000'}}>{task.due}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <span className={`status-badge ${task.status.toLowerCase().replace(' ', '-')}`}>
-                      {task.status}
-                    </span>
-                  </td>
+        <div className="card-container current-tasks" style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="card-title" style={{ alignSelf: 'flex-start' }}>Current Tasks</div>
+          <div style={{ overflowY: 'auto', flex: 1 }}>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th style={{width: '30px'}}></th>
+                  <th>TASK</th>
+                  <th>ASSIGNED TO</th>
+                  {isExpanded && <th>ORDER ID</th>}
+                  <th>DUE</th>
+                  <th style={{ textAlign: 'center' }}>STATUS</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredTasks.map((task, index) => (
+                  <tr key={index}>
+                    <td style={{color: '#5E594B', textAlign: 'center'}}>{index + 1}</td>
+                    <td style={{fontWeight: 500}}>
+                      <Highlight text={task.task} highlight={globalSearchTerm} />
+                    </td>
+                    <td>
+                      <Highlight text={task.assignedTo} highlight={globalSearchTerm} />
+                    </td>
+                    {isExpanded && <td style={{color: '#616161'}}>
+                      <Highlight text={task.orderId} highlight={globalSearchTerm} />
+                    </td>}
+                    <td style={{color: '#616161'}}>{task.due}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className={`status-badge status-${task.status.toLowerCase().replace(' ', '-')}`}>
+                        {task.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         
-        <div className="card-container officers-list">
+        <div className="card-container officers-list" style={{ display: 'flex', flexDirection: 'column', height: "8%" }}>
           <div className="card-title">Officers</div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>OFFICER</th>
-                <th style={{textAlign: 'right'}}>TASKS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {officers.map(officer => (
-                <tr key={officer.id}>
-                  <td style={{color: '#000'}}>{officer.name}</td>
-                  <td style={{textAlign: 'right', color: '#000'}}>{officer.tasks}</td>
+          <div style={{ overflowY: 'auto', flex: 1 }}>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>OFFICER</th>
+                  <th style={{textAlign: 'right'}}>TASKS</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredOfficers.map(officer => (
+                  <tr key={officer.id}>
+                    <td style={{color: '#000'}}>
+                      <Highlight text={officer.name} highlight={globalSearchTerm} />
+                    </td>
+                    <td style={{textAlign: 'right', color: '#000'}}>{officer.tasks}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

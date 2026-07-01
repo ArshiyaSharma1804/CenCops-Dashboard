@@ -1,28 +1,32 @@
-import React, { useState } from 'react';
-import { officers } from '../data';
+import React, { useState, useEffect } from 'react';
+import { useAppContext } from '../context/AppContext';
+import Highlight from '../components/Highlight';
+import './dashboard.css';
 
 const Officers = () => {
+  const { selectedDepartment, globalSearchTerm, officers } = useAppContext();
   const [selectedOfficer, setSelectedOfficer] = useState(null);
+  const [officerList, setOfficerList] = useState([]);
+
+  useEffect(() => {
+    setOfficerList(selectedDepartment === 'All' 
+      ? officers 
+      : officers.filter(o => o.department === selectedDepartment)
+    );
+    setSelectedOfficer(null); // Reset selection when department changes
+  }, [selectedDepartment, officers]);
 
   return (
     <div>
-      <div className="page-header">
-        <div className="page-subtitle" style={{ color: '#5E594B', letterSpacing: '-0.04em' }}>5 registered across 3 departments</div>
+      <div className="page-header" style={{ position: 'relative' }}>
+        <div className="page-subtitle" style={{ color: '#5E594B', letterSpacing: '-0.04em' }}>{officerList.length} registered experts in {selectedDepartment}</div>
         <div className="page-title">Experts</div>
       </div>
       
       <div className="dashboard-grid" style={{ display: 'flex', overflow: 'hidden' }}>
-        <div className="card-container" style={{ flex: selectedOfficer ? '0 0 75%' : '0 0 100%', transition: 'all 0.5s ease-in-out' }}>
-          
-          {/* Always visible All Departments tab above the table on the right */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
-            <div style={{ background: '#5e594b3e', border: '1px solid #C8BFA9', borderRadius: '15px', padding: '10px 20px', display: 'flex', gap: '30px', alignItems: 'center', cursor: 'pointer' }}>
-              <span style={{ fontSize: '14px', color: '#5E594B' }}>All Categories</span>
-              <span style={{ fontSize: '10px', color: '#5E594B' }}>▼</span>
-            </div>
-          </div>
-
-          <table className="table" style={{ width: '100%' }}>
+        <div className="card-container" style={{ flex: selectedOfficer ? '0 0 75%' : '0 0 100%', transition: 'all 0.5s ease-in-out', height: '560px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ overflowY: 'auto', flex: 1 }}>
+            <table className="table" style={{ width: '100%' }}>
             <thead>
               <tr>
                 <th style={{width: '30px', textAlign: 'center'}}></th>
@@ -33,7 +37,7 @@ const Officers = () => {
               </tr>
             </thead>
             <tbody>
-              {officers.map((officer, index) => (
+              {officerList.map((officer, index) => (
                 <tr 
                   key={officer.id} 
                   style={{ 
@@ -44,16 +48,23 @@ const Officers = () => {
                 >
                   <td style={{color: '#5E594B', textAlign: 'center'}}>{index + 1}</td>
                   <td>
-                    <div style={{color: '#000', fontWeight: '400'}}>{officer.name}</div>
-                    <div style={{color: '#5E594B', fontSize: '10px'}}>{officer.email}</div>
+                    <div style={{color: '#000', fontWeight: '400'}}>
+                      <Highlight text={officer.name} highlight={globalSearchTerm} />
+                    </div>
+                    <div style={{color: '#5E594B', fontSize: '10px'}}>
+                      <Highlight text={officer.email} highlight={globalSearchTerm} />
+                    </div>
                   </td>
-                  <td style={{color: '#000'}}>{officer.badge}</td>
+                  <td style={{color: '#000'}}>
+                    <Highlight text={officer.badge} highlight={globalSearchTerm} />
+                  </td>
                   <td style={{color: '#000'}}>{officer.department}</td>
                   <td style={{color: '#000'}}>{officer.tasks}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         </div>
         
         <div 

@@ -1,10 +1,10 @@
 .widget.widget-in-progress {
   /* Notice the period before widget-in-progress (no space) so it targets both classes on the same element */
-  background-color: #f5b8da;
+  background-color: var(--status-red-bg);
   border-radius: 15px;
-  width: 318px;
   height: 80px;
-  border: 2px solid var(--status-pink-border)
+  border: 2px solid var(--status-red-border);
+  color: var(--text-light);
 }
 
 .widget-title {
@@ -19,6 +19,7 @@
 .widget-subtitle {
   position: static; 
   padding-left: 8px;
+  color: inherit !important; /* Inherit color from parent widget */
 }
 
 .widget-count{
@@ -27,12 +28,13 @@
   padding-right: 18px;
 }
 
-.widget widget-done {
-  /* Notice the period before widget-in-progress (no space) so it targets both classes on the same element */
-  background-color: #9aab64;
+.widget.widget-done {
+  /* Notice the period before widget-done (no space) so it targets both classes on the same element */
+  background-color: var(--status-blue-bg);
   border-radius: 15px;
-  width: 318px;
   height: 80px;
+  border: 2px solid var(--status-blue-border);
+  color: var(--text-light);
 }
 
 .widget-title-done {
@@ -49,20 +51,4 @@
   position: static; 
   padding-left: 8px;
   color: white;
-}
-
-.current-tasks-1{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  width: 646px;
-  height: 481px;
-}
-
-.card-title-1 {
-  font-size: 31px;
-  font-weight: 500;
-  margin-bottom: 10px;
-  align-items: left;
 }

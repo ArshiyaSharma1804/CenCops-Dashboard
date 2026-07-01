@@ -7,14 +7,19 @@ import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Officers from './pages/Officers';
 import Departments from './pages/Departments';
+import Settings from './pages/Settings';
 import { AppProvider } from './context/AppContext';
+import CreateCaseModal from './components/CreateCaseModal';
+import RegisterOfficerModal from './components/RegisterOfficerModal';
+import AddDepartmentModal from './components/AddDepartmentModal';
 import './index.css';
 
 const Layout = ({ children }) => {
   return (
     <div className="app-container">
       <Sidebar />
-      <div className="main-content">
+      <div className="main-content" style={{ position: 'relative' }}>
+        <img src="/image.png" className="bg-watermark" alt="Background Watermark" />
         <Topbar />
         {children}
       </div>
@@ -32,14 +37,20 @@ function App() {
         {!isAuthenticated ? (
           <Login onLogin={() => setIsAuthenticated(true)} />
         ) : (
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-            <Route path="/tasks" element={<Layout><Tasks /></Layout>} />
-            <Route path="/officers" element={<Layout><Officers /></Layout>} />
-            <Route path="/departments" element={<Layout><Departments /></Layout>} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
+          <>
+            <CreateCaseModal />
+            <RegisterOfficerModal />
+            <AddDepartmentModal />
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+              <Route path="/tasks" element={<Layout><Tasks /></Layout>} />
+              <Route path="/officers" element={<Layout><Officers /></Layout>} />
+              <Route path="/departments" element={<Layout><Departments /></Layout>} />
+              <Route path="/settings" element={<Layout><Settings /></Layout>} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </>
         )}
         </Router>
       </div>

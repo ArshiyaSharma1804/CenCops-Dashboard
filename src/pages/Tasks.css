@@ -1,0 +1,14 @@
+.action-btn black {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 60px;
+  width: 48%;
+  background-color: #e7e7e7;
+}
+
+.image_all {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+}
