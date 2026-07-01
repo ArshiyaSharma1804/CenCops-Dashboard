@@ -1,9 +1,9 @@
 import React from 'react';
+import { departments } from '../data';
 import { useAppContext } from '../context/AppContext';
-import Highlight from '../components/Highlight';
 
 const Departments = () => {
-  const { isExpanded, selectedDepartment, setSelectedDepartment, globalSearchTerm, departments } = useAppContext();
+  const { isExpanded, selectedDepartment, setSelectedDepartment } = useAppContext();
 
   return (
     <div>
@@ -21,9 +21,7 @@ const Departments = () => {
                 className="department-image" 
                 style={dept.image && !dept.image.startsWith('image:') ? { backgroundImage: `url("${dept.image}")` } : {}}
               >
-                <div className="department-name">
-                  <Highlight text={dept.name} highlight={globalSearchTerm} />
-                </div>
+                <div className="department-name">{dept.name}</div>
               </div>
               
               <button 
@@ -38,8 +36,7 @@ const Departments = () => {
               <div className="stat-box">Tasks: {dept.tasks < 10 ? `0${dept.tasks}` : dept.tasks}</div>
             </div>
           </div>
-          );
-        })}
+        )})};
       </div>
       
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>

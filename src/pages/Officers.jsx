@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import Highlight from '../components/Highlight';
+import OfficerSidebar from '../components/OfficerSidebar';
 import './dashboard.css';
 
 const Officers = () => {
@@ -67,34 +68,8 @@ const Officers = () => {
           </div>
         </div>
         
-        <div 
-          className="officers-sidebar" 
-          style={{ 
-            flex: selectedOfficer ? '0 0 25%' : '0 0 0%', 
-            paddingLeft: selectedOfficer ? '20px' : '0px',
-            opacity: selectedOfficer ? 1 : 0,
-            transform: selectedOfficer ? 'translateX(0)' : 'translateX(50px)',
-            transition: 'all 0.5s ease-in-out',
-            visibility: selectedOfficer ? 'visible' : 'hidden'
-          }}
-        >
-          <div style={{ width: '250px', paddingTop: '20px' }}>
-            <div style={{ width: '200px', display: 'flex', justifyContent: 'flex-end' }}>
-              <div style={{ background: '#E3DDCC', borderRadius: '15px', padding: '5px 15px', display: 'inline-flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontFamily: 'var(--font-code)' }}>
-                {selectedOfficer?.name?.toUpperCase() || 'OFFICER'}
-                <span 
-                  onClick={() => setSelectedOfficer(null)}
-                  style={{ cursor: 'pointer', border: '1px solid #C8BFA9', borderRadius: '50%', width: 14, height: 14, display: 'inline-flex', justifyContent: 'center', alignItems: 'center', fontSize: 10 }}
-                >×</span>
-              </div>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-              <button className="action-btn" style={{ background: '#C8BFA9', width: '60px', height: '60px' }}>👤</button>
-              <button className="action-btn" style={{ background: '#C8BFA9', width: '60px', height: '60px' }}>📋</button>
-              <button className="action-btn" style={{ background: '#C8BFA9', width: '60px', height: '60px' }}>📁</button>
-            </div>
-          </div>
+        <div style={{ flex: selectedOfficer ? '0 0 25%' : '0 0 0%', transition: 'all 0.5s ease-in-out' }}>
+          <OfficerSidebar selectedOfficer={selectedOfficer} setSelectedOfficer={setSelectedOfficer} />
         </div>
       </div>
     </div>

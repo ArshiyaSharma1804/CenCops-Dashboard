@@ -6,13 +6,13 @@ import card4 from "./assets/image HARD_DRIVE.png";
 import card5 from "./assets/image MEDIA.png";
 
 export const officers = [
-  { id: 1, name: "Insp. Singh Sandhu", email: "sandhu@zoho.gov.in", badge: "PUN-078", department: "IPDR / CDR", tasks: 4 },
-  { id: 2, name: "SI R. Kapoor", email: "ranvir.kapoor@gmail.com", badge: "CHD-071", department: "OSINT", tasks: 3 },
-  { id: 3, name: "SI T. Banerjee", email: "president.banerjee@gmail.com", badge: "KAN-324", department: "Mobile", tasks: 3 },
-  { id: 4, name: "Const. Ali Raza", email: "aliraza1@drdo.gov.in", badge: "UKR-742", department: "Hard Drive", tasks: 2 },
-  { id: 5, name: "Const. K. Singh", email: "kulwinder29@gmail.com", badge: "CHD-009", department: "Media", tasks: 3 },
-  { id: 6, name: "Insp. P. Sharma", email: "p.sharma@gov.in", badge: "DEL-101", department: "OSINT", tasks: 2 },
-  { id: 7, name: "Const. J. Doe", email: "j.doe@gov.in", badge: "MUM-202", department: "Mobile", tasks: 1 },
+  { id: 1, name: "Insp. Singh Sandhu", badge: "PUN-078", email: "singh.sandhu@cencops.gov", department: "Digital Forensics", tasks: 4, rank: "Inspector", dob: "06-12-1977", age: "48 Years", district: "SAS Nagar", state: "Punjab" },
+  { id: 2, name: "Sub. Insp. Priya Sharma", badge: "DEL-142", email: "p.sharma@cencops.gov", department: "Cyber Intelligence", tasks: 7, rank: "Sub Inspector", dob: "14-03-1990", age: "36 Years", district: "New Delhi", state: "Delhi" },
+  { id: 3, name: "ACP Rajesh Kumar", badge: "MAH-005", email: "r.kumar@cencops.gov", department: "Media", tasks: 2, rank: "Asst. Commissioner", dob: "22-08-1982", age: "44 Years", district: "Mumbai", state: "Maharashtra" },
+  { id: 4, name: "Const. Amit Patel", badge: "GUJ-881", email: "a.patel@cencops.gov", department: "IPDR/CDR", tasks: 12, rank: "Constable", dob: "05-11-1995", age: "31 Years", district: "Ahmedabad", state: "Gujarat" },
+  { id: 5, name: "Tech. Sarah Jones", badge: "INT-442", email: "s.jones@cencops.gov", department: "Digital Forensics", tasks: 5, rank: "Technical Officer", dob: "19-01-1988", age: "38 Years", district: "Bangalore", state: "Karnataka" },
+  { id: 6, name: "Insp. Vikram Singh", badge: "RAJ-210", email: "v.singh@cencops.gov", department: "Media", tasks: 8, rank: "Inspector", dob: "30-05-1980", age: "46 Years", district: "Jaipur", state: "Rajasthan" },
+  { id: 7, name: "Sgt. Anita Desai", badge: "KAR-099", email: "a.desai@cencops.gov", department: "Cyber Intelligence", tasks: 3, rank: "Sergeant", dob: "11-09-1992", age: "34 Years", district: "Mysore", state: "Karnataka" }
 ];
 
 export const tasks = [
