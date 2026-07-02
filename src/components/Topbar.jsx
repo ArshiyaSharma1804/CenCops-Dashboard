@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Eye } from 'lucide-react';
 import defaultIcon from '../assets/svgviewer-png-output.png';
 import dropicon from '../assets/image.png';
 import iconNotifications from '../assets/topbar_icon_notifications.png';
@@ -302,20 +303,39 @@ const handleLogout = async () => {
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {userRole === 'admin' ? (
                 <>
-                  <li style={{ padding: '8px 0', borderBottom: '1px solid #ddd', fontSize: '12px' }}>Case ORD-2026-0158 assigned to SI R. Kapoor</li>
-                  <li style={{ padding: '8px 0', fontSize: '12px' }}>Category Media updated</li>
+                  {cases.filter(c => c.status === 'PENDING').length > 0 ? (
+                    cases.filter(c => c.status === 'PENDING').map((pendingCase) => (
+                      <li key={pendingCase.id} style={{ padding: '8px 0', borderBottom: '1px solid #ddd', fontSize: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>Case {pendingCase.order_id} assigned to {pendingCase.assigned_to}</div>
+                        <div className="report-view" style={{ cursor: 'pointer', transform: 'scale(0.8)', margin: 0 }} onClick={(e) => { e.stopPropagation(); window.open(`/api/files/order/${pendingCase.id}`, '_blank'); }}>
+                          <div className="eye-icon-container">
+                            <Eye size={12} color="#fff" />
+                          </div>
+                          <span>view</span>
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <li style={{ padding: '8px 0', fontSize: '12px', color: '#888' }}>No new assignments.</li>
+                  )}
                 </>
               ) : (
                 <>
                   {cases.filter(c => c.assigned_to === loggedInUser && c.status === 'PENDING').length > 0 ? (
                     cases.filter(c => c.assigned_to === loggedInUser && c.status === 'PENDING').map((pendingCase) => (
-                      <li key={pendingCase.id} style={{ padding: '8px 0', borderBottom: '1px solid #ddd', fontSize: '12px', cursor: 'pointer' }}
+                      <li key={pendingCase.id} style={{ padding: '8px 0', borderBottom: '1px solid #ddd', fontSize: '12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                           onClick={() => {
                             setActiveNotificationCaseId(pendingCase.id);
                             setIsNotifOpen(false);
                             navigate('/dashboard');
                           }}>
-                        New case assigned: {pendingCase.title}
+                        <div>New case assigned: {pendingCase.title}</div>
+                        <div className="report-view" style={{ cursor: 'pointer', transform: 'scale(0.8)', margin: 0 }} onClick={(e) => { e.stopPropagation(); window.open(`/api/files/order/${pendingCase.id}`, '_blank'); }}>
+                          <div className="eye-icon-container">
+                            <Eye size={12} color="#fff" />
+                          </div>
+                          <span>view</span>
+                        </div>
                       </li>
                     ))
                   ) : (

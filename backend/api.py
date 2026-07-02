@@ -1,7 +1,18 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app, send_file
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from models import db, User, Category, Case, Report, Order
 from auth import admin_required
+import os
+from datetime import datetime
+from werkzeug.utils import secure_filename
+
+ALLOWED_EXTENSIONS = {'pdf', 'docx', 'jpg', 'png'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def get_file_extension(filename):
+    return filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
 
 api_bp = Blueprint('api', __name__)
 
@@ -147,7 +158,13 @@ def get_cases():
 @api_bp.route('/cases', methods=['POST'])
 @admin_required()
 def add_case():
-    data = request.get_json()
+    if request.content_type and request.content_type.startswith('multipart/form-data'):
+        data = request.form
+        file = request.files.get('document')
+    else:
+        data = request.get_json()
+        file = None
+
     new_case = Case(
         order_id=data.get('order_id'),
         title=data.get('title'),
@@ -159,6 +176,29 @@ def add_case():
     )
     db.session.add(new_case)
     db.session.commit()
+
+    if file and file.filename and allowed_file(file.filename):
+        ext = get_file_extension(file.filename)
+        date_str = datetime.today().strftime('%Y%m%d')
+        filename = f"{date_str}-{new_case.order_id}-{new_case.id}.{ext}"
+        
+        orders_dir = os.path.join(current_app.config['STORAGE_ROOT'], 'orders')
+        os.makedirs(orders_dir, exist_ok=True)
+        
+        file_path = os.path.join(orders_dir, filename)
+        file.save(file_path)
+        
+        claims = get_jwt()
+        user_id = int(get_jwt_identity())
+        
+        order = Order(
+            case_id=new_case.id,
+            uploaded_by_id=user_id,
+            file_path=file_path
+        )
+        db.session.add(order)
+        db.session.commit()
+
     return jsonify({'msg': 'Case created successfully', 'id': new_case.id}), 201
 
 @api_bp.route('/cases/<int:case_id>', methods=['PUT'])
@@ -194,3 +234,65 @@ def delete_case(case_id):
     db.session.delete(c)
     db.session.commit()
     return jsonify({'msg': 'Case deleted'})
+
+@api_bp.route('/cases/<int:case_id>/report', methods=['POST'])
+@jwt_required()
+def add_report(case_id):
+    claims = get_jwt()
+    user_id = int(get_jwt_identity())
+    
+    c = Case.query.get_or_404(case_id)
+    if c.assigned_to_id != user_id and claims.get('role') != 'admin':
+        return jsonify({'msg': 'Unauthorized'}), 403
+        
+    if 'document' not in request.files:
+        return jsonify({'msg': 'No document provided'}), 400
+        
+    file = request.files['document']
+    if not file or not file.filename or not allowed_file(file.filename):
+        return jsonify({'msg': 'Invalid file type'}), 400
+        
+    ext = get_file_extension(file.filename)
+    date_str = datetime.today().strftime('%Y%m%d')
+    filename = f"{date_str}-{c.order_id}-{c.id}.{ext}"
+    
+    reports_dir = os.path.join(current_app.config['STORAGE_ROOT'], 'reports')
+    os.makedirs(reports_dir, exist_ok=True)
+    
+    file_path = os.path.join(reports_dir, filename)
+    file.save(file_path)
+    
+    report = Report(
+        case_id=c.id,
+        uploaded_by_id=user_id,
+        file_path=file_path
+    )
+    db.session.add(report)
+    
+    c.status = 'DONE'
+    db.session.commit()
+    
+    return jsonify({'msg': 'Report uploaded successfully'})
+
+@api_bp.route('/files/<type>/<int:id>', methods=['GET'])
+@jwt_required()
+def get_file(type, id):
+    claims = get_jwt()
+    user_id = int(get_jwt_identity())
+    role = claims.get('role')
+    
+    if type == 'order':
+        record = Order.query.filter_by(case_id=id).order_by(Order.id.desc()).first_or_404()
+    elif type == 'report':
+        record = Report.query.filter_by(case_id=id).order_by(Report.id.desc()).first_or_404()
+    else:
+        return jsonify({'msg': 'Invalid file type'}), 400
+        
+    c = record.case
+    if role != 'admin' and c.assigned_to_id != user_id:
+        return jsonify({'msg': 'Unauthorized'}), 403
+        
+    if not os.path.exists(record.file_path):
+        return jsonify({'msg': 'File not found on server'}), 404
+        
+    return send_file(record.file_path)

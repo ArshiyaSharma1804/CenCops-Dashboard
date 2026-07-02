@@ -1,13 +1,14 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import './dashboard.css';
 import { useAppContext } from '../context/AppContext';
 import Highlight from '../components/Highlight';
 import { Eye, FileText, CheckCircle } from 'lucide-react';
 
 const Dashboard = () => {
-  const { isExpanded, selectedCategory, globalSearchTerm, cases, experts, userRole, loggedInUser, activeNotificationCaseId, setActiveNotificationCaseId, updateCaseStatus } = useAppContext();
+  const { isExpanded, selectedCategory, globalSearchTerm, cases, experts, userRole, loggedInUser, activeNotificationCaseId, setActiveNotificationCaseId, updateCaseStatus, uploadReport } = useAppContext();
   
   const [selectedCaseId, setSelectedCaseId] = useState(null);
+  const reportFileInputRef = useRef(null);
 
   useEffect(() => {
     if (activeNotificationCaseId) {
@@ -60,11 +61,24 @@ const Dashboard = () => {
 
   const selectedCase = selectedCaseId ? cases.find(c => c.id === selectedCaseId) : null;
 
-  const handleSubmitReport = () => {
-    if (selectedCaseId) {
-      updateCaseStatus(selectedCaseId, 'DONE');
+  const handleSubmitReportClick = () => {
+    if (reportFileInputRef.current) {
+      reportFileInputRef.current.click();
+    }
+  };
+
+  const handleReportFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && selectedCaseId) {
+      const formData = new FormData();
+      formData.append('document', file);
+      uploadReport(selectedCaseId, formData);
       setSelectedCaseId(null);
     }
+  };
+
+  const viewFile = (type, caseId) => {
+    window.open(`/api/files/${type}/${caseId}`, '_blank');
   };
 
   return (
@@ -204,8 +218,15 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
+                <input 
+                  type="file" 
+                  ref={reportFileInputRef}
+                  style={{ display: 'none' }}
+                  accept=".pdf,.docx,.jpg,.png"
+                  onChange={handleReportFileChange}
+                />
                 <button 
-                  onClick={handleSubmitReport}
+                  onClick={handleSubmitReportClick}
                   disabled={selectedCase.status.toUpperCase() === 'DONE'}
                   style={{
                     background: selectedCase.status.toUpperCase() === 'DONE' ? '#ccc' : '#000',
@@ -237,7 +258,7 @@ const Dashboard = () => {
                           <div className="report-id">{report.orderId} / {report.caseNo}</div>
                           <div className="report-title">{report.title}</div>
                         </div>
-                        <div className="report-view">
+                        <div className="report-view" onClick={() => viewFile('report', report.id)}>
                           <div className="eye-icon-container">
                             <Eye size={12} color="#fff" />
                           </div>

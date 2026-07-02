@@ -3,12 +3,13 @@ import { useAppContext } from '../context/AppContext';
 import './CreateCaseModal.css';
 
 const CreateCaseModal = () => {
-  const { isCreateCaseModalOpen, setIsCreateCaseModalOpen, categories, experts, addCase } = useAppContext();
+  const { isCreateCaseModalOpen, setIsCreateCaseModalOpen, categories, experts, addCaseWithDocument } = useAppContext();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [assigneeId, setAssigneeId] = useState('');
+  const [documentFile, setDocumentFile] = useState(null);
 
   if (!isCreateCaseModalOpen) return null;
 
@@ -23,20 +24,26 @@ const CreateCaseModal = () => {
       // Generate realistic looking dummy data for new case
       const newOrderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
 
-      addCase({
-        title: title,
-        description: description,
-        assigned_to_id: parseInt(assigneeId),
-        order_id: newOrderId,
-        status: 'PENDING',
-        category_id: parseInt(categoryId)
-      });
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('assigned_to_id', assigneeId);
+      formData.append('order_id', newOrderId);
+      formData.append('status', 'PENDING');
+      formData.append('category_id', categoryId);
+      
+      if (documentFile) {
+        formData.append('document', documentFile);
+      }
+
+      addCaseWithDocument(formData);
 
       // Reset and close
       setTitle('');
       setDescription('');
       setCategoryId('');
       setAssigneeId('');
+      setDocumentFile(null);
       setIsCreateCaseModalOpen(false);
     } else {
       alert("Please fill in Title, Category, and Assignee.");
@@ -108,11 +115,25 @@ const CreateCaseModal = () => {
             </div>
           </div>
           
-          <div className="modal-input-group" style={{ cursor: 'pointer' }}>
+          <div className="modal-input-group" style={{ cursor: 'pointer', position: 'relative' }}>
             <div className="modal-input" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#616161' }}>
-              <span>Attach relevant documents</span>
+              <span>{documentFile ? documentFile.name : 'Attach relevant documents'}</span>
               <span style={{ fontSize: '16px' }}>+</span>
             </div>
+            <input 
+              type="file" 
+              accept=".pdf,.docx,.jpg,.png" 
+              onChange={(e) => setDocumentFile(e.target.files[0])}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0,
+                cursor: 'pointer'
+              }}
+            />
           </div>
         </div>
 
