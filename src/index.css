@@ -64,7 +64,7 @@ body {
   padding: 68px 0 30px 42px;
   z-index: 10;
   flex-shrink: 0;
-  transition: all 0.5s ease;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   overflow: hidden;
 }
 
@@ -136,35 +136,37 @@ body {
 }
 
 .nav-item.active {
-  background-color: var(--bg-light);
   color: var(--text-dark);
   font-weight: 400;
+  /* background-color and curves moved to .nav-active-indicator */
 }
 
-/* Sidebar active item curve hacks */
-.nav-item.active::before,
-.nav-item.active::after {
-  content: '';
+.nav-item.active img {
+  filter: brightness(0); /* Instantly turns white icons into black icons */
+}
+
+/* Nav curve styles for the sliding indicator */
+.nav-curve-top {
   position: absolute;
   right: 0;
+  top: -17px;
   width: 17px;
   height: 17px;
-  background-color: transparent;
-}
-
-.nav-item.active::before {
-  top: -17px;
   border-bottom-right-radius: 17px;
   box-shadow: 8px 8px 0 8px var(--bg-light);
+  background: transparent;
 }
 
-.nav-item.active::after {
+.nav-curve-bottom {
+  position: absolute;
+  right: 0;
   bottom: -17px;
+  width: 17px;
+  height: 17px;
   border-top-right-radius: 17px;
   box-shadow: 8px -8px 0 8px var(--bg-light);
+  background: transparent;
 }
-
-
 .nav-icon {
   width: 18px;
   height: 18px;
@@ -178,7 +180,7 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-left: -10px;
+  margin-left: 10px;
 }
 
 .user-avatar {
@@ -208,7 +210,7 @@ body {
   flex-direction: column;
   position: relative;
   z-index: 1;
-  transition: all 0.5s ease;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   overflow: hidden; /* Prevent watermark from bleeding out */
 }
 
@@ -392,13 +394,13 @@ body {
   gap: 20px;
 }
 
-.current-tasks {
+.current-cases {
   grid-column: span 2;
   width: 100% !important;
   height: 460px !important;
 }
 
-.officers-list {
+.experts-list {
   grid-column: span 1;
   width: 100% !important;
   height: 460px !important;
@@ -422,11 +424,11 @@ body {
   letter-spacing: -0.04em;
 }
 
-.current-tasks {
+.current-cases {
   flex: 2;
 }
 
-.officers-list {
+.experts-list {
   flex: 1;
 }
 
@@ -490,7 +492,7 @@ body {
 }
 
 /* ------------------- TASKS PAGE ------------------- */
-.tasks-header-actions {
+.cases-header-actions {
   display: flex;
   gap: 10px;
   position: absolute;
@@ -499,9 +501,9 @@ body {
 }
 
 .action-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -510,14 +512,14 @@ body {
   font-size: 20px;
 }
 
-.action-btn.black { background: #000; color: #fff; }
-.action-btn.pink { background: var(--status-red-bg); border: 1px solid var(--status-red-border); color: #fff; }
-.action-btn.yellow { background: var(--status-gray-bg); border: 1px solid var(--status-gray-border); color: #000; }
-.action-btn.green { background: var(--status-blue-bg); border: 1px solid var(--status-blue-border); color: #fff; }
+.action-btn.black { width: 50px; height: 50px; border-radius: 15px; background: #000; color: #fff; }
+.action-btn.pink { width: 50px; height: 50px; border-radius: 15px; background: var(--status-red-bg); border: 1px solid var(--status-red-border); color: #fff; }
+.action-btn.yellow { width: 50px; height: 50px; border-radius: 15px; background: var(--status-gray-bg); border: 1px solid var(--status-gray-border); color: #000; }
+.action-btn.green { width: 50px; height: 50px; border-radius: 15px; background: var(--status-blue-bg); border: 1px solid var(--status-blue-border); color: #fff; }
 
 .action-btn img {
-  width: 24px;
-  height: 24px;
+  width: 17px;
+  height: 17px;
   object-fit: contain;
 }
 
@@ -532,30 +534,31 @@ body {
 }
 
 /* ------------------- DEPARTMENTS PAGE ------------------- */
-.departments-grid {
+.categories-grid {
   display: flex;
   gap: 20px;
   margin-top: 20px;
   overflow-x: auto;
   padding-bottom: 20px; /* space for scrollbar */
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Custom Scrollbar for the departments grid */
-.departments-grid::-webkit-scrollbar {
+/* Custom Scrollbar for the categories grid */
+.categories-grid::-webkit-scrollbar {
   height: 8px;
 }
-.departments-grid::-webkit-scrollbar-track {
+.categories-grid::-webkit-scrollbar-track {
   background: transparent;
 }
-.departments-grid::-webkit-scrollbar-thumb {
+.categories-grid::-webkit-scrollbar-thumb {
   background-color: #E3DDCC;
   border-radius: 10px;
 }
-.departments-grid::-webkit-scrollbar-thumb:hover {
+.categories-grid::-webkit-scrollbar-thumb:hover {
   background-color: #C8BFA9;
 }
 
-.department-card {
+.category-card {
   flex: 0 0 auto;
   background: var(--bg-card);
   border: 2px solid var(--border-color);
@@ -565,18 +568,20 @@ body {
   padding: 10px;
   position: relative;
   height: 450px;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.departments-grid.sidebar-expanded .department-card {
-  width: calc((100% - 60px) / 4); /* 4 cards visible, 3 gaps of 20px */
+.categories-grid.sidebar-expanded .category-card {
+  width: calc((100% - 40px) / 3); /* 3 cards visible */
 }
 
-.departments-grid.sidebar-collapsed .department-card {
-  width: calc((100% - 40px) / 3); /* 3 cards visible, 2 gaps of 20px */
+.categories-grid.sidebar-collapsed .category-card {
+  width: calc((100% - 60px) / 4); /* 4 cards visible */
 }
 
-.department-image {
+.category-image {
   flex-grow: 1;
+  height: 180px;
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -584,7 +589,16 @@ body {
   position: relative;
 }
 
-.department-name {
+.category-actions {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-card:hover .category-actions {
+  opacity: 1;
+}
+
+.category-name {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -593,7 +607,7 @@ body {
   color: var(--text-dark);
 }
 
-.department-btn {
+.category-btn {
   width: 100%;
   padding: 15px 0;
   border-radius: 5px;
@@ -603,18 +617,18 @@ body {
   border: none;
 }
 
-.department-btn.active {
+.category-btn.active {
   background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-muted);
 }
 
-.department-btn.switch {
+.category-btn.switch {
   background: var(--bg-dark);
   color: var(--text-light);
 }
 
-.department-stats {
+.category-stats {
   display: flex;
   gap: 10px;
   margin-top: 10px;
@@ -631,13 +645,13 @@ body {
 }
 
 /* ------------------- OFFICERS PAGE ------------------- */
-.officers-actions {
+.experts-actions {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-.officers-actions .dropdown-btn {
+.experts-actions .dropdown-btn {
   width: 250px;
 }
 
