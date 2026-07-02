@@ -117,6 +117,24 @@ export const AppProvider = ({ children }) => {
     } catch (e) { console.error(e); }
   };
 
+  const addCaseWithDocument = async (formData) => {
+    try {
+      await axios.post('/api/cases', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      await fetchData();
+    } catch (e) { console.error(e); }
+  };
+
+  const uploadReport = async (caseId, formData) => {
+    try {
+      await axios.post(`/api/cases/${caseId}/report`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      await fetchData();
+    } catch (e) { console.error(e); }
+  };
+
   const updateCaseStatus = async (id, newStatus) => {
     try {
       await axios.put(`/api/cases/${id}`, { status: newStatus });
@@ -148,7 +166,7 @@ export const AppProvider = ({ children }) => {
       
       categories, addCategory, updateCategory, removeCategory,
       experts, addExpert, updateExpert, removeExpert,
-      cases, addCase, updateCaseStatus,
+      cases, addCase, addCaseWithDocument, uploadReport, updateCaseStatus,
       
       isCreateCaseModalOpen, setIsCreateCaseModalOpen,
       isRegisterExpertModalOpen, setIsRegisterExpertModalOpen,

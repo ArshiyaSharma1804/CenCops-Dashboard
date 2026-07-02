@@ -226,7 +226,7 @@ const Experts = () => {
                           <div className="report-id">{report.orderId} / {report.caseNo}</div>
                           <div className="report-title">{report.title}</div>
                         </div>
-                        <div className="report-view">
+                        <div className="report-view" onClick={() => window.open(`/api/files/report/${expertCases.find(c => c.order_id === report.orderId)?.id}`, '_blank')} style={{ cursor: 'pointer' }}>
                           <div className="eye-icon-container">
                             <Eye size={12} color="#fff" />
                           </div>
