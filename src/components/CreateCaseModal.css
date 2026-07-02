@@ -13,9 +13,33 @@
   z-index: 9999;
 }
 
-.modal-content {
+.modal-content-cases {
   width: 645px;
-  height: 569px;
+  height: 60%;
+  background: #E7E7E7;
+  border: 5px solid #D1D1D1;
+  border-radius: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.modal-content-experts {
+  width: 645px;
+  height: 60%;
+  background: #E7E7E7;
+  border: 5px solid #D1D1D1;
+  border-radius: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.modal-content-categories {
+  width: 645px;
+  height: 53%;
   background: #E7E7E7;
   border: 5px solid #D1D1D1;
   border-radius: 40px;

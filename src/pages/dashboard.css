@@ -53,7 +53,13 @@
   color: white;
 }
 
-/* Officers Sidebar Styles */
+/* Experts Sidebar Styles */
+:root {
+  /* You can tweak these variables to change the button size */
+  --action-btn-width: 65px;
+  --action-btn-height: 65px;
+}
+
 .action-btn {
   border: none;
   border-radius: 8px;
@@ -64,9 +70,12 @@
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  background: #d5d5d5;
+  width: var(--action-btn-width);
+  height: var(--action-btn-height);
 }
 
-.action-btn:hover, .action-btn.active {
+.action-btn:hover {
   background: #000 !important;
   color: #fff;
 }
@@ -90,8 +99,13 @@
   pointer-events: none;
 }
 
-.action-btn:hover::after, .action-btn.active::after {
+.action-btn:hover::after {
   opacity: 1;
+}
+
+.action-btn.active {
+  background: #000; /* A slightly darker shade to indicate it's selected */
+  color: #fff;
 }
 
 .tab-content {
@@ -132,20 +146,20 @@
 }
 
 /* Cases Tab */
-.tasks-list {
+.cases-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.task-item {
+.case-item {
   display: flex;
   align-items: center;
   gap: 15px;
   padding: 5px 0;
 }
 
-.task-checkbox {
+.case-checkbox {
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -156,12 +170,12 @@
   background: transparent;
 }
 
-.task-item.done .task-checkbox {
+.case-item.done .case-checkbox {
   background: #000;
   border-color: #000;
 }
 
-.task-badge {
+.case-badge {
   padding: 4px 10px;
   border-radius: 4px;
   font-family: var(--font-code);
@@ -171,13 +185,13 @@
   border: 1px solid rgba(0,0,0,0.1);
 }
 
-.task-title {
+.case-title {
   font-family: var(--font-main);
   font-size: 11px;
   color: #000;
 }
 
-.task-item.done .task-title {
+.case-item.done .case-title {
   color: rgba(94, 89, 75, 0.5);
   text-decoration: line-through;
   font-style: italic;
