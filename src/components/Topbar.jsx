@@ -321,8 +321,8 @@ const handleLogout = async () => {
                 </>
               ) : (
                 <>
-                  {cases.filter(c => c.assigned_to === loggedInUser && c.status === 'PENDING').length > 0 ? (
-                    cases.filter(c => c.assigned_to === loggedInUser && c.status === 'PENDING').map((pendingCase) => (
+                  {cases.filter(c => c.assignees_list?.some(a => a.name === loggedInUser) && c.status === 'PENDING').length > 0 ? (
+                    cases.filter(c => c.assignees_list?.some(a => a.name === loggedInUser) && c.status === 'PENDING').map((pendingCase) => (
                       <li key={pendingCase.id} style={{ padding: '8px 0', borderBottom: '1px solid #ddd', fontSize: '12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                           onClick={() => {
                             setActiveNotificationCaseId(pendingCase.id);

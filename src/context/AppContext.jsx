@@ -126,6 +126,19 @@ export const AppProvider = ({ children }) => {
     } catch (e) { console.error(e); }
   };
 
+  const getCaseUpdates = async (caseId) => {
+    try {
+      const res = await axios.get(`/api/cases/${caseId}/updates`);
+      return res.data;
+    } catch (e) { console.error(e); return []; }
+  };
+
+  const postCaseUpdate = async (caseId, content) => {
+    try {
+      await axios.post(`/api/cases/${caseId}/updates`, { content });
+    } catch (e) { console.error(e); }
+  };
+
   const uploadReport = async (caseId, formData) => {
     try {
       await axios.post(`/api/cases/${caseId}/report`, formData, {
@@ -166,7 +179,7 @@ export const AppProvider = ({ children }) => {
       
       categories, addCategory, updateCategory, removeCategory,
       experts, addExpert, updateExpert, removeExpert,
-      cases, addCase, addCaseWithDocument, uploadReport, updateCaseStatus,
+      cases, addCase, addCaseWithDocument, uploadReport, updateCaseStatus, getCaseUpdates, postCaseUpdate,
       
       isCreateCaseModalOpen, setIsCreateCaseModalOpen,
       isRegisterExpertModalOpen, setIsRegisterExpertModalOpen,

@@ -4,6 +4,16 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+case_categories = db.Table('case_categories',
+    db.Column('case_id', db.Integer, db.ForeignKey('cases.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+)
+
+case_assignees = db.Table('case_assignees',
+    db.Column('case_id', db.Integer, db.ForeignKey('cases.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+)
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -42,12 +52,21 @@ class Case(db.Model):
     description = db.Column(db.Text, nullable=True)
     due_date = db.Column(db.String(50), nullable=True)
     status = db.Column(db.String(50), nullable=False, default='PENDING') # PENDING, IN PROGRESS, DONE
-    assigned_to_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
     start_date = db.Column(db.DateTime, default=datetime.utcnow)
     
-    assigned_expert = db.relationship('User', backref='cases')
-    category = db.relationship('Category', backref='cases')
+    categories = db.relationship('Category', secondary=case_categories, lazy='subquery', backref=db.backref('cases', lazy=True))
+    assignees = db.relationship('User', secondary=case_assignees, lazy='subquery', backref=db.backref('assigned_cases', lazy=True))
+
+class CaseUpdate(db.Model):
+    __tablename__ = 'case_updates'
+    id = db.Column(db.Integer, primary_key=True)
+    case_id = db.Column(db.Integer, db.ForeignKey('cases.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    case = db.relationship('Case', backref='updates')
+    user = db.relationship('User')
 
 class Report(db.Model):
     __tablename__ = 'reports'

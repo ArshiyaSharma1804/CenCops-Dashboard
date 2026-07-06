@@ -5,10 +5,45 @@ import Highlight from '../components/Highlight';
 import { Eye, FileText, CheckCircle } from 'lucide-react';
 
 const Dashboard = () => {
-  const { isExpanded, selectedCategory, globalSearchTerm, cases, experts, userRole, loggedInUser, activeNotificationCaseId, setActiveNotificationCaseId, updateCaseStatus, uploadReport } = useAppContext();
+  const { isExpanded, selectedCategory, globalSearchTerm, cases, experts, userRole, loggedInUser, activeNotificationCaseId, setActiveNotificationCaseId, updateCaseStatus, uploadReport, getCaseUpdates, postCaseUpdate } = useAppContext();
   
   const [selectedCaseId, setSelectedCaseId] = useState(null);
+  const [caseUpdates, setCaseUpdates] = useState([]);
+  const [newUpdateContent, setNewUpdateContent] = useState('');
   const reportFileInputRef = useRef(null);
+
+  const ReadOnlyAssigneeDropdown = ({ caseItem }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const assignees = caseItem.assignees_list || [];
+    
+    if (assignees.length === 0) return <span>Unassigned</span>;
+    
+    return (
+      <div style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+        <div 
+          className="select-dropdown" 
+          onClick={() => setIsOpen(!isOpen)}
+          style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'transparent', padding: '0px' }}
+        >
+          <span style={{ fontSize: '14px' }}>{assignees[0].name} {assignees.length > 1 ? `(+${assignees.length - 1})` : ''}</span>
+          <span style={{ fontSize: '10px' }}>▼</span>
+        </div>
+        {isOpen && (
+          <div style={{ 
+            position: 'absolute', top: '100%', left: 0, right: 0, 
+            background: '#fff', border: '1px solid #ccc', zIndex: 10,
+            maxHeight: '150px', overflowY: 'auto', padding: '5px', borderRadius: '4px'
+          }}>
+            {assignees.map(expert => (
+              <div key={expert.id} style={{ padding: '4px 0', fontSize: '12px', color: '#333' }}>
+                {expert.name}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   useEffect(() => {
     if (activeNotificationCaseId) {
@@ -24,13 +59,13 @@ const Dashboard = () => {
 
   const userCases = useMemo(() => {
     if (userRole === 'admin') return cases;
-    return cases.filter(t => t.assigned_to === loggedInUser);
+    return cases.filter(t => t.assignees_list?.some(a => a.name === loggedInUser));
   }, [cases, userRole, loggedInUser]);
 
   const filteredCases = useMemo(() => 
     selectedCategory === 'All' 
       ? userCases 
-      : userCases.filter(t => t.category === selectedCategory)
+      : userCases.filter(t => t.categories_list?.some(c => c.name === selectedCategory))
   , [selectedCategory, userCases]);
   
   const filteredExperts = useMemo(() => 
@@ -61,6 +96,20 @@ const Dashboard = () => {
 
   const selectedCase = selectedCaseId ? cases.find(c => c.id === selectedCaseId) : null;
 
+  useEffect(() => {
+    if (selectedCaseId) {
+      getCaseUpdates(selectedCaseId).then(setCaseUpdates);
+    }
+  }, [selectedCaseId]);
+
+  const handleSendUpdate = async () => {
+    if (newUpdateContent.trim() && selectedCaseId) {
+      await postCaseUpdate(selectedCaseId, newUpdateContent);
+      setNewUpdateContent('');
+      getCaseUpdates(selectedCaseId).then(setCaseUpdates);
+    }
+  };
+
   const handleSubmitReportClick = () => {
     if (reportFileInputRef.current) {
       reportFileInputRef.current.click();
@@ -68,10 +117,10 @@ const Dashboard = () => {
   };
 
   const handleReportFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && selectedCaseId) {
+    const files = Array.from(e.target.files);
+    if (files.length > 0 && selectedCaseId) {
       const formData = new FormData();
-      formData.append('document', file);
+      files.forEach(file => formData.append('documents[]', file));
       uploadReport(selectedCaseId, formData);
       setSelectedCaseId(null);
     }
@@ -80,6 +129,8 @@ const Dashboard = () => {
   const viewFile = (type, caseId) => {
     window.open(`/api/files/${type}/${caseId}`, '_blank');
   };
+
+
 
   return (
     <div>
@@ -145,7 +196,7 @@ const Dashboard = () => {
                         <Highlight text={caseItem.title} highlight={globalSearchTerm} />
                       </td>
                       <td style={{fontWeight: isPending ? 'bold' : 'normal'}}>
-                        <Highlight text={caseItem.assigned_to} highlight={globalSearchTerm} />
+                        <ReadOnlyAssigneeDropdown caseItem={caseItem} />
                       </td>
                       {isExpanded && <td style={{color: '#616161', fontWeight: isPending ? 'bold' : 'normal'}}>
                         <Highlight text={caseItem.order_id} highlight={globalSearchTerm} />
@@ -217,14 +268,42 @@ const Dashboard = () => {
                       {selectedCase.description || 'No description provided.'}
                     </div>
                   </div>
+                  <div>
+                    <strong style={{ fontSize: '12px', color: '#888' }}>UPDATES TIMELINE</strong>
+                    <div style={{ marginTop: '5px', maxHeight: '150px', overflowY: 'auto', background: '#fff', padding: '10px', borderRadius: '5px', border: '1px solid #e0e0e0' }}>
+                      {caseUpdates.length > 0 ? caseUpdates.map(u => (
+                        <div key={u.id} style={{ marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '5px' }}>
+                          <div style={{ fontSize: '11px', color: '#888', display: 'flex', justifyContent: 'space-between' }}>
+                            <strong>{u.user_name}</strong><span>{u.timestamp}</span>
+                          </div>
+                          <div style={{ fontSize: '13px', color: '#333', whiteSpace: 'pre-wrap' }}>{u.content}</div>
+                        </div>
+                      )) : <div style={{ fontSize: '12px', color: '#888' }}>No updates yet.</div>}
+                    </div>
+                    {selectedCase.status.toUpperCase() !== 'DONE' && (
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <input 
+                          type="text" 
+                          value={newUpdateContent}
+                          onChange={e => setNewUpdateContent(e.target.value)}
+                          placeholder="Type an update..."
+                          style={{ flex: 1, padding: '8px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '13px' }}
+                        />
+                        <button onClick={handleSendUpdate} style={{ padding: '8px 15px', background: '#000', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}>Send</button>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <input 
                   type="file" 
+                  multiple
                   ref={reportFileInputRef}
                   style={{ display: 'none' }}
                   accept=".pdf,.docx,.jpg,.png"
                   onChange={handleReportFileChange}
                 />
+                
+
                 <button 
                   onClick={handleSubmitReportClick}
                   disabled={selectedCase.status.toUpperCase() === 'DONE'}
@@ -240,8 +319,7 @@ const Dashboard = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: '10px',
-                    marginTop: '10px'
+                    gap: '10px'
                   }}
                 >
                   {selectedCase.status.toUpperCase() === 'DONE' ? <><CheckCircle size={16} /> REPORT SUBMITTED</> : 'SUBMIT REPORT'}

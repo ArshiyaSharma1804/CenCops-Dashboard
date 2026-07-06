@@ -37,7 +37,7 @@ const Experts = () => {
     }
   }, [selectedExpert]);
 
-  const expertCases = cases.filter(t => t.assigned_to_id === selectedExpert?.id);
+  const expertCases = cases.filter(t => t.assignees_list?.some(a => a.id === selectedExpert?.id));
   const reports = expertCases.filter(t => t.status === 'DONE').map((t, index) => ({
     orderId: t.order_id,
     caseNo: `CASE ${t.id}`,
@@ -95,7 +95,7 @@ const Experts = () => {
                     <Highlight text={expert.badge_number} highlight={globalSearchTerm} />
                   </td>
                   <td style={{color: '#000'}}>{expert.category}</td>
-                  <td style={{color: '#000'}}>{cases.filter(c => c.assigned_to_id === expert.id).length}</td>
+                  <td style={{color: '#000'}}>{cases.filter(c => c.assignees_list?.some(a => a.id === expert.id)).length}</td>
                 </tr>
               ))}
             </tbody>

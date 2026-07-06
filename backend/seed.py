@@ -52,8 +52,8 @@ def seed_database():
             description="Detailed review of network logs for the recent anomaly in subnet 4.",
             due_date="2026-07-15",
             status="PENDING",
-            assigned_to_id=expert.id,
-            category_id=categories[0].id
+            assignees=[expert],
+            categories=[categories[0]]
         )
         case2 = Case(
             order_id="ORD-2026-002",
@@ -61,8 +61,8 @@ def seed_database():
             description="Reverse engineer the APK file retrieved from the suspect's mobile device.",
             due_date="2026-07-20",
             status="PENDING",
-            assigned_to_id=expert.id,
-            category_id=categories[2].id
+            assignees=[expert],
+            categories=[categories[2]]
         )
         db.session.add_all([case1, case2])
         db.session.commit()
